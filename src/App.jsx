@@ -127,13 +127,18 @@ export default function App() {
     await refreshDownloads()
   }
 
+  async function onRemove(id) {
+    await api.removeDownload(id)
+    setDownloads((prev) => prev.filter((item) => item.id !== id))
+  }
+
   return (
     <main className="layout">
       <header className="hero">
         <div>
-          <p className="eyebrow">Internet Download Manager Style</p>
-          <h1>Turbo Downloader Console</h1>
-          <p className="subtitle">Parallel chunks, queue orchestration, and live transfer telemetry.</p>
+          <p className="eyebrow">Web IDM Professional Suite</p>
+          <h1>Web IDM Control Center</h1>
+          <p className="subtitle">Parallel transfer engine, intelligent queue orchestration, and real-time telemetry.</p>
         </div>
 
         <div className="stats-grid">
@@ -165,6 +170,7 @@ export default function App() {
         onPause={onPause}
         onResume={onResume}
         onCancel={onCancel}
+        onRemove={onRemove}
       />
     </main>
   )

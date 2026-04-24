@@ -39,6 +39,7 @@ export const api = {
   pauseDownload: (id) => request(`/download/pause/${id}`, { method: 'POST' }),
   resumeDownload: (id) => request(`/download/resume/${id}`, { method: 'POST' }),
   cancelDownload: (id) => request(`/download/cancel/${id}`, { method: 'POST' }),
+  removeDownload: (id) => request(`/download/remove/${id}`, { method: 'POST' }),
 }
 
 export function humanBytes(bytes) {

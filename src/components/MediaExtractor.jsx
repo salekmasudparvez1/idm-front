@@ -37,7 +37,12 @@ export default function MediaExtractor() {
       setVideoLinks(data.video_links || [])
       setImageLinks(data.image_links || [])
     } catch (err) {
-      setError(err.message)
+      const message = String(err.message || '')
+      if (message.toLowerCase().includes('domain not supported')) {
+        setError('This domain is not supported by extractor policy. Contact admin to allow it.')
+      } else {
+        setError(message)
+      }
       setVideoLinks([])
       setImageLinks([])
     } finally {

@@ -6,10 +6,11 @@ function actionLabel(status) {
   return null
 }
 
-export default function DownloadRow({ item, onPause, onResume, onCancel }) {
+export default function DownloadRow({ item, onPause, onResume, onCancel, onRemove }) {
   const pct = Number(item.progress_pct || 0).toFixed(2)
   const action = actionLabel(item.status)
   const canSave = item.status === 'completed'
+  const canRemove = ['completed', 'cancelled', 'error'].includes(item.status)
 
   async function handleAction() {
     if (action === 'Pause') await onPause(item.id)
@@ -46,6 +47,11 @@ export default function DownloadRow({ item, onPause, onResume, onCancel }) {
         {item.status !== 'completed' && item.status !== 'cancelled' && (
           <button className="danger" onClick={() => onCancel(item.id)}>
             Cancel
+          </button>
+        )}
+        {canRemove && (
+          <button className="danger" onClick={() => onRemove(item.id)}>
+            Remove
           </button>
         )}
       </div>

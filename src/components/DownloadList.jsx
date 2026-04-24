@@ -1,6 +1,6 @@
 import DownloadRow from './DownloadRow'
 
-export default function DownloadList({ downloads, onPause, onResume, onCancel }) {
+export default function DownloadList({ downloads, onPause, onResume, onCancel, onRemove }) {
   if (!downloads.length) {
     return (
       <section className="empty-state">
@@ -19,6 +19,7 @@ export default function DownloadList({ downloads, onPause, onResume, onCancel })
           onPause={onPause}
           onResume={onResume}
           onCancel={onCancel}
+          onRemove={onRemove}
         />
       ))}
     </section>
