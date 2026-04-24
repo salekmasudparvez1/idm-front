@@ -28,6 +28,7 @@ export default function App() {
     try {
       const data = await api.listDownloads()
       setDownloads(data.downloads || [])
+      setError('')
     } catch (err) {
       setError(err.message)
     }

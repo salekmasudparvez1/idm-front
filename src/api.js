@@ -1,15 +1,21 @@
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000'
-const WS_BASE = API_BASE.replace(/^http/, 'ws')
+const WS_BASE = import.meta.env.VITE_WS_BASE || API_BASE.replace(/^http/, 'ws')
 
 async function request(path, options = {}) {
-  const response = await fetch(`${API_BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
-    ...options,
-  })
+  let response
+  try {
+    response = await fetch(`${API_BASE}${path}`, {
+      headers: { 'Content-Type': 'application/json' },
+      ...options,
+    })
+  } catch {
+    throw new Error(`Cannot reach backend at ${API_BASE}. Check deployment/CORS/network.`)
+  }
 
   if (!response.ok) {
     const body = await response.json().catch(() => ({}))
-    throw new Error(body.detail || 'Request failed')
+    const message = body.detail || body.message || `HTTP ${response.status}`
+    throw new Error(`API error (${response.status}): ${message}`)
   }
 
   return response.json()
