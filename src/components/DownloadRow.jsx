@@ -1,4 +1,4 @@
-import { humanBytes, humanSpeed } from '../api'
+import { api, humanBytes, humanSpeed } from '../api'
 
 function actionLabel(status) {
   if (status === 'downloading' || status === 'queued') return 'Pause'
@@ -9,6 +9,7 @@ function actionLabel(status) {
 export default function DownloadRow({ item, onPause, onResume, onCancel }) {
   const pct = Number(item.progress_pct || 0).toFixed(2)
   const action = actionLabel(item.status)
+  const canSave = item.status === 'completed'
 
   async function handleAction() {
     if (action === 'Pause') await onPause(item.id)
@@ -36,6 +37,11 @@ export default function DownloadRow({ item, onPause, onResume, onCancel }) {
       </div>
 
       <div className="row-actions">
+        {canSave && (
+          <button onClick={() => window.open(api.fileUrl(item.id), '_blank')}>
+            Save
+          </button>
+        )}
         {action && <button onClick={handleAction}>{action}</button>}
         {item.status !== 'completed' && item.status !== 'cancelled' && (
           <button className="danger" onClick={() => onCancel(item.id)}>

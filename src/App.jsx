@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import DownloadForm from './components/DownloadForm'
 import DownloadList from './components/DownloadList'
+import MediaExtractor from './components/MediaExtractor'
 import { api } from './api'
 
 function upsertDownload(list, item) {
@@ -155,6 +156,7 @@ export default function App() {
         </div>
       </header>
 
+      <MediaExtractor />
       <DownloadForm onStart={handleStart} busy={isAdding} />
       {notice && <p className="banner-info">{notice}</p>}
       {error && <p className="banner-error">{error}</p>}

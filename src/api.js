@@ -24,7 +24,13 @@ async function request(path, options = {}) {
 export const api = {
   baseUrl: API_BASE,
   wsUrl: `${WS_BASE}/ws/progress`,
+  fileUrl: (id) => `${API_BASE}/download/file/${id}`,
   listDownloads: () => request('/downloads'),
+  extractMedia: (url) =>
+    request('/download/extract', {
+      method: 'POST',
+      body: JSON.stringify({ url }),
+    }),
   startDownload: (url, chunkCount) =>
     request('/download/start', {
       method: 'POST',

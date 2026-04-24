@@ -90,6 +90,7 @@ h1 {
 
 .download-form,
 .download-list,
+.extract-panel,
 .empty-state,
 .banner-error {
     background: rgba(255, 251, 242, 0.9);
@@ -100,6 +101,54 @@ h1 {
 
 .download-form {
     padding: 1rem 1.1rem;
+}
+
+.extract-panel {
+    padding: 1rem 1.1rem;
+    display: grid;
+    gap: 0.8rem;
+}
+
+.extract-form {
+    display: grid;
+    grid-template-columns: 1fr 150px;
+    gap: 0.6rem;
+}
+
+.extract-results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+}
+
+.extract-results-block {
+    border: 1px solid #e6dbc8;
+    border-radius: 14px;
+    padding: 0.8rem;
+    background: #fffefb;
+}
+
+.extract-results-block h3 {
+    margin: 0 0 0.55rem;
+    font-size: 1rem;
+}
+
+.extract-list {
+    margin: 0;
+    padding-left: 1rem;
+    display: grid;
+    gap: 0.35rem;
+    max-height: 240px;
+    overflow: auto;
+}
+
+.extract-list a {
+    color: #0d5f75;
+    text-decoration: none;
+}
+
+.extract-list a:hover {
+    text-decoration: underline;
 }
 
 .form-title-wrap h2 {
@@ -315,6 +364,11 @@ button.danger:hover {
     }
 
     .meta-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .extract-form,
+    .extract-results-grid {
         grid-template-columns: 1fr;
     }
 }
