@@ -14,6 +14,7 @@ function upsertDownload(list, item) {
 export default function App() {
   const [downloads, setDownloads] = useState([])
   const [error, setError] = useState('')
+  const [notice, setNotice] = useState('')
   const [isAdding, setIsAdding] = useState(false)
 
   const stats = useMemo(() => {
@@ -35,32 +36,64 @@ export default function App() {
   useEffect(() => {
     refreshDownloads()
 
-    const ws = new WebSocket(api.wsUrl)
+    let pollingTimer
+    let ws
+    let wsOpened = false
 
-    ws.onmessage = (event) => {
-      try {
-        const payload = JSON.parse(event.data)
-        if (payload.event === 'progress' && payload.data) {
-          setDownloads((prev) => upsertDownload(prev, payload.data))
-        }
-      } catch {
-        // Ignore malformed websocket messages.
+    const startPolling = () => {
+      if (pollingTimer) return
+      pollingTimer = setInterval(() => {
+        refreshDownloads()
+      }, 2500)
+      setNotice('Live socket unavailable. Using auto-refresh mode.')
+    }
+
+    try {
+      ws = new WebSocket(api.wsUrl)
+
+      ws.onopen = () => {
+        wsOpened = true
+        setNotice('')
       }
+
+      ws.onmessage = (event) => {
+        try {
+          const payload = JSON.parse(event.data)
+          if (payload.event === 'progress' && payload.data) {
+            setDownloads((prev) => upsertDownload(prev, payload.data))
+          }
+        } catch {
+          // Ignore malformed websocket messages.
+        }
+      }
+
+      ws.onerror = () => {
+        if (!wsOpened) {
+          startPolling()
+        }
+      }
+
+      ws.onclose = () => {
+        startPolling()
+      }
+    } catch {
+      startPolling()
     }
 
     const ping = setInterval(() => {
-      if (ws.readyState === WebSocket.OPEN) {
+      if (ws && ws.readyState === WebSocket.OPEN) {
         ws.send('ping')
       }
     }, 20000)
 
-    ws.onerror = () => {
-      setError('Realtime updates disconnected. Refreshing via API only.')
-    }
-
     return () => {
       clearInterval(ping)
-      ws.close()
+      if (pollingTimer) {
+        clearInterval(pollingTimer)
+      }
+      if (ws) {
+        ws.close()
+      }
     }
   }, [])
 
@@ -122,6 +155,7 @@ export default function App() {
       </header>
 
       <DownloadForm onStart={handleStart} busy={isAdding} />
+      {notice && <p className="banner-info">{notice}</p>}
       {error && <p className="banner-error">{error}</p>}
       <DownloadList
         downloads={downloads}

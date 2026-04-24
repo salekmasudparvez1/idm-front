@@ -262,6 +262,15 @@ button.danger:hover {
     color: #881e28;
 }
 
+.banner-info {
+    margin: 0;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid #9cc9d7;
+    border-radius: 14px;
+    background: #eaf7fb;
+    color: #1f5464;
+}
+
 .banner-error {
     padding: 0.7rem 0.9rem;
     margin: 0;
