@@ -35,7 +35,7 @@ export interface JobResponse {
     updated_at: string
 }
 
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000'
+const API_BASE = import.meta.env.VITE_API_BASE || 'https://idm-backend-tau.vercel.app'
 
 function buildUrl(path: string): string {
     return `${API_BASE}${path}`
